@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  name      String
+  email     String     @unique
+  password  String
+  createdAt DateTime   @default(now())
+  campaigns Campaign[]
+}
+
+model Campaign {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  npcs        NPC[]
+  players     Player[]
+}
+
+model Player {
+  id         String   @id @default(uuid())
+  name       String
+  class      String
+  level      Int      @default(1)
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id])
+}
+
+model NPC {
+  id         String   @id @default(uuid())
+  name       String
+  role       String
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id])
+}
