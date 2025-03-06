@@ -24,6 +24,15 @@ export class UsersService {
         return user;
     }
 
+    async getUserByEmail(email: string) {
+        console.log("Buscando usuário com email:", email); // <-- Log para depuração
+    
+        const user = await this.prisma.user.findUnique({ where: { email } });
+    
+        console.log("Usuário encontrado:", user); // <-- Log para ver o que está retornando
+        return user;
+    }
+
     async deleteUser(id: string) {
         return this.prisma.user.delete({ where: { id } })
     }
